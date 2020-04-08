@@ -19,7 +19,10 @@ const Button: React.FC<ButtonProps> = ({ row, col, state, value }) => {
             💣
           </span>
         );
+      } else if (value === CellValue.none) {
+        return null;
       }
+      return value;
     } else if (state === CellState.flagged) {
       return (
         <span role="img" aria-label="flag">
@@ -32,7 +35,11 @@ const Button: React.FC<ButtonProps> = ({ row, col, state, value }) => {
   };
 
   return (
-    <div className={`Button ${state === CellState.visible ? "visible" : ""}`}>
+    <div
+      className={`Button ${
+        state === CellState.visible ? "visible" : ""
+      } value-${value}`}
+    >
       {renderContent()}
     </div>
   );

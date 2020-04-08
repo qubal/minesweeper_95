@@ -11,7 +11,7 @@ export const generateCells = () => {
     for (let col = 0; col < MAX_COLS; col++) {
       cells[row].push({
         value: CellValue.none,
-        state: CellState.visible, //TODO: Make it open
+        state: CellState.open, //TODO: Make it open
       });
     }
   }
@@ -60,6 +60,31 @@ export const generateCells = () => {
 
       if (topLeftBomb?.value === CellValue.bomb) {
         numberOfBombs++;
+      }
+      if (topBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (topRightBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (leftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomLeftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomRightBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+
+      if (numberOfBombs > 0) {
+        cells[rowIdx][colIdx] = {
+          ...currentCell,
+          value: numberOfBombs,
+        };
       }
     }
   }
