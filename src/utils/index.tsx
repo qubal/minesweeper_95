@@ -1,6 +1,5 @@
 import { MAX_COLS, MAX_ROWS, NUMBER_OF_BOBMS } from "../constants/index";
 import { Cell, CellValue, CellState } from "../types/index";
-import { findRenderedComponentWithType } from "react-dom/test-utils";
 
 export const generateCells = () => {
   let cells: Cell[][] = [];
@@ -68,6 +67,9 @@ export const generateCells = () => {
         numberOfBombs++;
       }
       if (leftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (rightBomb?.value === CellValue.bomb) {
         numberOfBombs++;
       }
       if (bottomLeftBomb?.value === CellValue.bomb) {
