@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import "./app.styles.scss";
 
 import NumberDisplay from "../number-display/number-display.component";
-import { generateCells } from "../../utils/index";
+import { generateCells, openMultipleCells } from "../../utils/index";
 import Button from "../button/button.component";
-import { Cell, Face, CellState } from "../../types/index";
+import { Cell, Face, CellState, CellValue } from "../../types/index";
 
 const App: React.FC = () => {
   const [cells, setCells] = useState<Cell[][]>(generateCells());
@@ -61,8 +61,28 @@ const App: React.FC = () => {
 
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
     //starts the game
+
     if (!isLive) {
+      //TODO: Make sure not to click on a bomb
+
       setLive(true);
+    }
+
+    const currentCell = cells[rowParam][colParam];
+    let newCells = cells.slice();
+
+    if ([CellState.flagged, CellState.visible].includes(currentCell.state)) {
+      return;
+    }
+
+    if (currentCell.value === CellValue.bomb) {
+      //TODO: take care of bomb click
+    } else if (currentCell.value === CellValue.none) {
+      //TODO;
+      newCells = openMultipleCells(newCells, rowParam, colParam);
+    } else {
+      newCells[rowParam][colParam].state = CellState.visible;
+      setCells(newCells);
     }
   };
 
