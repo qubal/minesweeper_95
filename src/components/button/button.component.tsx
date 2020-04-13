@@ -6,6 +6,7 @@ import { CellState, CellValue } from "../../types";
 interface ButtonProps {
   row: number;
   col: number;
+  red?: boolean;
   state: CellState;
   value: CellValue;
   onClick(rowParam: number, colParam: number): (...args: any[]) => void;
@@ -19,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   onContext,
   value,
+  red,
 }) => {
   const renderContent = (): React.ReactNode => {
     if (state === CellState.visible) {
@@ -47,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
     <div
       className={`Button ${
         state === CellState.visible ? "visible" : ""
-      } value-${value}`}
+      } value-${value} ${red ? "red" : ""}`}
       onClick={onClick(row, col)}
       onContextMenu={onContext(row, col)}
     >
