@@ -99,59 +99,63 @@ const App: React.FC = () => {
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
     //starts the game
 
-    let newCells = cells.slice();
+    if (!isLive && !hasLost) {
+      let newCells = cells.slice();
 
-    const currentCell = newCells[rowParam][colParam];
+      const currentCell = newCells[rowParam][colParam];
 
-    if ([CellState.flagged, CellState.visible].includes(currentCell.state)) {
-      return;
-    }
+      if ([CellState.flagged, CellState.visible].includes(currentCell.state)) {
+        return;
+      }
 
-    if (currentCell.value === CellValue.bomb) {
-      setHasLost(true);
-      setFace(Face.lost_face);
-      newCells[rowParam][colParam].red = true;
-      newCells = showAllBobms();
-      setCells(newCells);
-      return;
-    } else if (currentCell.value === CellValue.none) {
-      newCells = openMultipleCells(newCells, rowParam, colParam);
-    } else {
-      newCells[rowParam][colParam].state = CellState.visible;
-    }
+      if (currentCell.value === CellValue.bomb) {
+        setHasLost(true);
+        setFace(Face.lost_face);
+        newCells[rowParam][colParam].red = true;
+        newCells = showAllBobms();
+        setCells(newCells);
+        return;
+      } else if (currentCell.value === CellValue.none) {
+        newCells = openMultipleCells(newCells, rowParam, colParam);
+      } else {
+        newCells[rowParam][colParam].state = CellState.visible;
+      }
 
-    //Check to see if won
-    let safeOpenCellsExists = false;
-    for (let row = 0; row < MAX_ROWS; row++) {
-      for (let col = 0; col < MAX_COLS; col++) {
-        const currentCell = newCells[row][col];
+      //Check to see if won
+      let safeOpenCellsExists = false;
+      for (let row = 0; row < MAX_ROWS; row++) {
+        for (let col = 0; col < MAX_COLS; col++) {
+          const currentCell = newCells[row][col];
 
-        if (
-          currentCell.value !== CellValue.bomb &&
-          currentCell.state === CellState.open
-        ) {
-          safeOpenCellsExists = true;
-          break;
+          if (
+            currentCell.value !== CellValue.bomb &&
+            currentCell.state === CellState.open
+          ) {
+            safeOpenCellsExists = true;
+            break;
+          }
         }
       }
-    }
 
-    if (!safeOpenCellsExists) {
-      newCells = newCells.map((row) =>
-        row.map((cell) => {
-          if (cell.value === CellValue.bomb) {
-            return {
-              ...cell,
-              state: CellState.flagged,
-            };
-          }
-          return cell;
-        })
-      );
-      setHasWon(true);
-    }
+      if (!safeOpenCellsExists) {
+        newCells = newCells.map((row) =>
+          row.map((cell) => {
+            if (cell.value === CellValue.bomb) {
+              return {
+                ...cell,
+                state: CellState.flagged,
+              };
+            }
+            return cell;
+          })
+        );
+        setHasWon(true);
+      }
 
-    setCells(newCells);
+      setCells(newCells);
+    } else {
+      return;
+    }
   };
 
   const handleCellContext = (rowParam: number, colParam: number) => (
