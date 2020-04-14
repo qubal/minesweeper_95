@@ -163,23 +163,23 @@ const App: React.FC = () => {
   ): void => {
     e.preventDefault();
 
-    if (!isLive) {
-      return;
-    }
+    if (isLive) {
+      const currentCells = cells.slice();
+      const currentCell = cells[rowParam][colParam];
 
-    const currentCells = cells.slice();
-    const currentCell = cells[rowParam][colParam];
-
-    if (currentCell.state === CellState.visible) {
+      if (currentCell.state === CellState.visible) {
+        return;
+      } else if (currentCell.state === CellState.open) {
+        currentCells[rowParam][colParam].state = CellState.flagged;
+        setCells(currentCells);
+        setBombmCounter(bombCounter - 1);
+      } else if ((currentCell.state = CellState.flagged)) {
+        currentCells[rowParam][colParam].state = CellState.open;
+        setCells(currentCells);
+        setBombmCounter(bombCounter + 1);
+      }
+    } else {
       return;
-    } else if (currentCell.state === CellState.open) {
-      currentCells[rowParam][colParam].state = CellState.flagged;
-      setCells(currentCells);
-      setBombmCounter(bombCounter - 1);
-    } else if ((currentCell.state = CellState.flagged)) {
-      currentCells[rowParam][colParam].state = CellState.open;
-      setCells(currentCells);
-      setBombmCounter(bombCounter + 1);
     }
   };
 
