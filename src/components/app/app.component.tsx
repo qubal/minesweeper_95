@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [face, setFace] = useState<Face>(Face.smile_face);
   const [time, setTime] = useState<number>(0);
   const [isLive, setLive] = useState<boolean>(false);
-  const [bombCounter, setBombmCounter] = useState<number>(10);
+  const [bombCounter, setBombCounter] = useState<number>(10);
   const [hasLost, setHasLost] = useState<boolean>(false);
   const [hasWon, setHasWon] = useState<boolean>(false);
 
@@ -163,23 +163,23 @@ const App: React.FC = () => {
   ): void => {
     e.preventDefault();
 
-    if (isLive) {
-      const currentCells = cells.slice();
-      const currentCell = cells[rowParam][colParam];
-
-      if (currentCell.state === CellState.visible) {
-        return;
-      } else if (currentCell.state === CellState.open) {
-        currentCells[rowParam][colParam].state = CellState.flagged;
-        setCells(currentCells);
-        setBombmCounter(bombCounter - 1);
-      } else if ((currentCell.state = CellState.flagged)) {
-        currentCells[rowParam][colParam].state = CellState.open;
-        setCells(currentCells);
-        setBombmCounter(bombCounter + 1);
-      }
-    } else {
+    if (!isLive) {
       return;
+    }
+
+    const currentCells = cells.slice();
+    const currentCell = cells[rowParam][colParam];
+
+    if (currentCell.state === CellState.visible) {
+      return;
+    } else if (currentCell.state === CellState.open) {
+      currentCells[rowParam][colParam].state = CellState.flagged;
+      setCells(currentCells);
+      setBombCounter(bombCounter - 1);
+    } else if (currentCell.state === CellState.flagged) {
+      currentCells[rowParam][colParam].state = CellState.open;
+      setCells(currentCells);
+      setBombCounter(bombCounter + 1);
     }
   };
 
